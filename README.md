@@ -4,14 +4,14 @@ windows cls command for linux similar to linux cls command, this programs cleans
 1. compiling
    
 
-     make cls
+       make cls
 
 
 
 3. running
 
 
-     ./cls
+       ./cls
 
 
 
