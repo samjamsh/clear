@@ -1,5 +1,6 @@
-# cls-for-linux
-windows cls command for linux similar to linux cls command, this programs cleans terminal screen
+# clear screen
+this is ngcu 'clear' program for unix like distributions
+
 
 1. compiling
    
