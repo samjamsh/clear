@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define VERSION "1.1"
 #define WEBPAGE "https://github.com/samjamsh/clear"
 #define OWNER "Sam Jamsh"
 #define SOCIAL "@sam.jamsh"
@@ -46,7 +47,6 @@ unsigned short stringlen(char *string){
 }
 
 
-// compares two strings
 bool cmpstr(char *string1, char *string2)
 {
     char s1_char = 1;
@@ -66,7 +66,7 @@ bool cmpstr(char *string1, char *string2)
 }
 
 
-bool isdigit_(char* ptr)
+bool termid_isdigit(char* ptr)
 {
     if (ptr[0] > 47 && ptr[0] < 58 && ptr[1] == 0)
     {
@@ -95,9 +95,9 @@ return SUCCESS;
 }
 
 
-char* getPath(char *string1, char *string2)
+char* getPath(char *string1, char *termid)
 {
-    if (string1 == NULL || string2 == NULL)
+    if (string1 == NULL || termid == NULL)
     {
         printf("string1/2 NULL\n");
         return NULL;
@@ -120,7 +120,7 @@ char* getPath(char *string1, char *string2)
 
     for (i = i; i < allocate; i++)
     {
-        ptr[i] = string2[i - string1_lenght];
+        ptr[i] = termid[i - string1_lenght];
     }
     ptr[allocate] = '\0';
 
@@ -128,7 +128,7 @@ return ptr;
 }
 
 
-bool clear_mode(char term_id, char *buffer, size_t buflen)
+bool clear_mode(signed char term_id, char *buffer, size_t buflen)
 {
 
     FILE *fp; // file pointer
@@ -140,6 +140,7 @@ bool clear_mode(char term_id, char *buffer, size_t buflen)
 
         char *path = getPath("/dev/pts/", &term_id);
         if (path == NULL)
+
         {
             perror("error with path memory");
             return ERROR;
@@ -180,7 +181,8 @@ size_t mdsize;
 
 char *default_ = "\033[2J\033[H\033[3J"; // default mode
 
-char *personalized = "\033[2J";
+char *personalized = "\033[2J"; // personalized mode
+
 
 if (argc == 1)
 {
@@ -190,7 +192,7 @@ if (argc == 1)
 }
 
 else if (argc == 2 && cmpstr(argv[1], "--version") == 0){
-    printf("%s (NGCU) version 1.1\nCopyright (C) 2024 Free and Open Source Software.\nThis is a free software: you are free to modify and redistribute it.\nWritten by %s instagram> %s, email> %s\n", argv[0], OWNER, SOCIAL, EMAIL);
+    printf("%s (NGCU) version %s\nCopyright (C) 2024 Free and Open Source Software.\nThis is a free software: you are free to modify and redistribute it.\nWritten by %s instagram> %s, email> %s\n", argv[0], VERSION, OWNER, SOCIAL, EMAIL);
     return 0;
 }
 
@@ -203,7 +205,7 @@ else if (argc == 2 && cmpstr(argv[1], "-i") == 0)
 
 else if (argc == 3 && cmpstr(argv[1], "-p") == 0)
 {
-    if (isdigit_(argv[2]))
+    if (termid_isdigit(argv[2]))
     {
     term_id = argv[2][0];
     mdsize = 11;
@@ -216,7 +218,7 @@ else if (argc == 3 && cmpstr(argv[1], "-p") == 0)
 
 else if (argc == 4 && cmpstr(argv[1], "-p") == 0 && cmpstr(argv[3], "-i") == 0)
 {
-    if (isdigit_(argv[2]))
+    if (termid_isdigit(argv[2]))
     {
     term_id = argv[2][0];
     mdsize = 4;
@@ -229,7 +231,7 @@ else if (argc == 4 && cmpstr(argv[1], "-p") == 0 && cmpstr(argv[3], "-i") == 0)
 
 else if (argc == 4 && cmpstr(argv[1], "-i") == 0 && cmpstr(argv[2], "-p") == 0)
 {
-    if(isdigit_(argv[3]))
+    if(termid_isdigit(argv[3]))
     {
     term_id = argv[3][0];
     mdsize = 4;
@@ -243,7 +245,7 @@ else if (argc == 4 && cmpstr(argv[1], "-i") == 0 && cmpstr(argv[2], "-p") == 0)
 else
 {
     // error
-    printf("Usage: %s [option]\n\nOptions:\n  -i ignore   clear terminal screen but don't reset cursor position\n  -p pts      specify the terminal tty number \n  --version   prints program version information\n  --help      shows this message\n\nExamples:\n  %s -i  clear screen without reseting cursor position\n  %s  clear terminal screen and resets cursor position\n\nreporting bugs and complete documentation in <%s>\ncopyright: this is a free software, you are free to redistribute it.\nthis software was written by %s\n", argv[0], argv[0], argv[0], WEBPAGE, OWNER);
+    printf("Usage: %s [option]\n\nOptions:\n  -i ignore   clear terminal screen and ignores scrollback buffer and cursor position reset\n  -p pts      specify the terminal tty number \n  --version   prints program version information\n  --help      shows this message\n\nExamples:\n  %s -i  clear screen ignoring scrollback buffer and cursor position\n  %s  clear terminal screen and resets cursor position\n\nreporting bugs and complete documentation in <%s>\ncopyright: this is a free software, you are free to redistribute it.\nthis software was written by %s\n", argv[0], argv[0], argv[0], WEBPAGE, OWNER);
     return 1;
 }
 
